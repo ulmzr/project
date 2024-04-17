@@ -1,0 +1,1 @@
+export default [{ path: "/about", page: import("./pages/About.svelte") },{ path: "/login", page: import("./pages/login/pageIndex.svelte") },{ path: "/", page: import("./pages/pageIndex.svelte") },{ path: "/register", page: import("./pages/register/pageIndex.svelte") },]
