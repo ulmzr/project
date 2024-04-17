@@ -153,6 +153,10 @@
   function empty() {
     return text("");
   }
+  function listen(node, event, handler, options) {
+    node.addEventListener(event, handler, options);
+    return () => node.removeEventListener(event, handler, options);
+  }
   function attr(node, attribute, value) {
     if (value == null)
       node.removeAttribute(attribute);
@@ -237,6 +241,9 @@
   }
   function add_render_callback(fn) {
     render_callbacks.push(fn);
+  }
+  function add_flush_callback(fn) {
+    flush_callbacks.push(fn);
   }
   function flush() {
     if (flushidx !== 0) {
@@ -448,6 +455,13 @@
   });
 
   // node_modules/svelte/src/runtime/internal/Component.js
+  function bind(component, name, callback) {
+    const index = component.$$.props[name];
+    if (index !== void 0) {
+      component.$$.bound[index] = callback;
+      callback(component.$$.ctx[index]);
+    }
+  }
   function create_component(block) {
     block && block.c();
   }
@@ -483,7 +497,7 @@
     }
     component.$$.dirty[i / 31 | 0] |= 1 << i % 31;
   }
-  function init(component, options, instance4, create_fragment8, not_equal, props, append_styles = null, dirty = [-1]) {
+  function init(component, options, instance6, create_fragment10, not_equal, props, append_styles = null, dirty = [-1]) {
     const parent_component = current_component;
     set_current_component(component);
     const $$ = component.$$ = {
@@ -509,7 +523,7 @@
     };
     append_styles && append_styles($$.root);
     let ready = false;
-    $$.ctx = instance4 ? instance4(component, options.props || {}, (i, ret, ...rest) => {
+    $$.ctx = instance6 ? instance6(component, options.props || {}, (i, ret, ...rest) => {
       const value = rest.length ? rest[0] : ret;
       if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
         if (!$$.skip_bound && $$.bound[i])
@@ -522,7 +536,7 @@
     $$.update();
     ready = true;
     run_all($$.before_update);
-    $$.fragment = create_fragment8 ? create_fragment8($$.ctx) : false;
+    $$.fragment = create_fragment10 ? create_fragment10($$.ctx) : false;
     if (options.target) {
       if (options.hydrate) {
         start_hydrating();
@@ -953,21 +967,64 @@
     default: () => pageIndex_default2
   });
   function create_fragment3(ctx) {
+    let span;
+    let t0;
+    let br0;
+    let t1;
+    let br1;
+    let t2;
     let h1;
+    let t4;
+    let p0;
+    let t6;
+    let p1;
     return {
       c() {
+        span = element("span");
+        span.innerHTML = `<img src="/img/profile-uisi.jpg" alt="profile"/>`;
+        t0 = space();
+        br0 = element("br");
+        t1 = space();
+        br1 = element("br");
+        t2 = space();
         h1 = element("h1");
-        h1.textContent = "Home";
+        h1.textContent = "Profil UISI";
+        t4 = space();
+        p0 = element("p");
+        p0.textContent = "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis optio numquam obcaecati, consectetur earum quae\r\n    quasi, cum fugit quisquam blanditiis culpa dicta vitae harum, saepe deserunt! Explicabo repellendus veniam quos!";
+        t6 = space();
+        p1 = element("p");
+        p1.textContent = "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut eveniet sint pariatur ullam unde quo beatae\r\n    exercitationem quia illum, sed soluta adipisci reprehenderit voluptas? Laudantium cupiditate harum quibusdam atque\r\n    exercitationem.";
       },
       m(target, anchor) {
+        insert(target, span, anchor);
+        insert(target, t0, anchor);
+        insert(target, br0, anchor);
+        insert(target, t1, anchor);
+        insert(target, br1, anchor);
+        insert(target, t2, anchor);
         insert(target, h1, anchor);
+        insert(target, t4, anchor);
+        insert(target, p0, anchor);
+        insert(target, t6, anchor);
+        insert(target, p1, anchor);
       },
       p: noop,
       i: noop,
       o: noop,
       d(detaching) {
         if (detaching) {
+          detach(span);
+          detach(t0);
+          detach(br0);
+          detach(t1);
+          detach(br1);
+          detach(t2);
           detach(h1);
+          detach(t4);
+          detach(p0);
+          detach(t6);
+          detach(p1);
         }
       }
     };
@@ -1041,7 +1098,7 @@
   init_define_process();
   init_internal();
 
-  // node_modules/svelte-devserver/router.js
+  // router.js
   init_define_process();
   function Router() {
     let routes = arguments[0], e404, callback, cmp, params, query;
@@ -1155,11 +1212,389 @@
   };
   var E404_default = E404;
 
-  // src/cmp/Sidebar.svelte
+  // src/cmp/Navbar.svelte
+  init_define_process();
+  init_internal();
+  init_disclose_version();
+
+  // src/cmp/Login.svelte
   init_define_process();
   init_internal();
   init_disclose_version();
   function create_fragment6(ctx) {
+    let section;
+    let div;
+    let t1;
+    let button;
+    let mounted;
+    let dispose;
+    return {
+      c() {
+        section = element("section");
+        div = element("div");
+        div.textContent = "Login";
+        t1 = space();
+        button = element("button");
+        button.textContent = "Submit";
+        attr(button, "class", "button");
+        attr(section, "class", "svelte-jotjxi");
+      },
+      m(target, anchor) {
+        insert(target, section, anchor);
+        append(section, div);
+        append(section, t1);
+        append(section, button);
+        if (!mounted) {
+          dispose = listen(
+            button,
+            "click",
+            /*processLogin*/
+            ctx[0]
+          );
+          mounted = true;
+        }
+      },
+      p: noop,
+      i: noop,
+      o: noop,
+      d(detaching) {
+        if (detaching) {
+          detach(section);
+        }
+        mounted = false;
+        dispose();
+      }
+    };
+  }
+  function instance2($$self, $$props, $$invalidate) {
+    let { active } = $$props;
+    let { authenticated } = $$props;
+    function processLogin() {
+      $$invalidate(1, active = !active);
+      $$invalidate(2, authenticated = true);
+      localStorage.setItem("authenticated", true);
+    }
+    $$self.$$set = ($$props2) => {
+      if ("active" in $$props2)
+        $$invalidate(1, active = $$props2.active);
+      if ("authenticated" in $$props2)
+        $$invalidate(2, authenticated = $$props2.authenticated);
+    };
+    return [processLogin, active, authenticated];
+  }
+  var Login = class extends SvelteComponent {
+    constructor(options) {
+      super();
+      init(this, options, instance2, create_fragment6, safe_not_equal, { active: 1, authenticated: 2 });
+    }
+  };
+  var Login_default = Login;
+
+  // src/cmp/Navbar.svelte
+  function create_else_block(ctx) {
+    let button;
+    let mounted;
+    let dispose;
+    return {
+      c() {
+        button = element("button");
+        button.textContent = "Logout";
+      },
+      m(target, anchor) {
+        insert(target, button, anchor);
+        if (!mounted) {
+          dispose = listen(
+            button,
+            "click",
+            /*processLogout*/
+            ctx[2]
+          );
+          mounted = true;
+        }
+      },
+      p: noop,
+      d(detaching) {
+        if (detaching) {
+          detach(button);
+        }
+        mounted = false;
+        dispose();
+      }
+    };
+  }
+  function create_if_block_1(ctx) {
+    let button;
+    let mounted;
+    let dispose;
+    return {
+      c() {
+        button = element("button");
+        button.textContent = "Login";
+      },
+      m(target, anchor) {
+        insert(target, button, anchor);
+        if (!mounted) {
+          dispose = listen(
+            button,
+            "click",
+            /*click_handler*/
+            ctx[3]
+          );
+          mounted = true;
+        }
+      },
+      p: noop,
+      d(detaching) {
+        if (detaching) {
+          detach(button);
+        }
+        mounted = false;
+        dispose();
+      }
+    };
+  }
+  function create_if_block(ctx) {
+    let login;
+    let updating_active;
+    let updating_authenticated;
+    let current;
+    function login_active_binding(value) {
+      ctx[4](value);
+    }
+    function login_authenticated_binding(value) {
+      ctx[5](value);
+    }
+    let login_props = {};
+    if (
+      /*showLogin*/
+      ctx[1] !== void 0
+    ) {
+      login_props.active = /*showLogin*/
+      ctx[1];
+    }
+    if (
+      /*authenticated*/
+      ctx[0] !== void 0
+    ) {
+      login_props.authenticated = /*authenticated*/
+      ctx[0];
+    }
+    login = new Login_default({ props: login_props });
+    binding_callbacks.push(() => bind(login, "active", login_active_binding));
+    binding_callbacks.push(() => bind(login, "authenticated", login_authenticated_binding));
+    return {
+      c() {
+        create_component(login.$$.fragment);
+      },
+      m(target, anchor) {
+        mount_component(login, target, anchor);
+        current = true;
+      },
+      p(ctx2, dirty) {
+        const login_changes = {};
+        if (!updating_active && dirty & /*showLogin*/
+        2) {
+          updating_active = true;
+          login_changes.active = /*showLogin*/
+          ctx2[1];
+          add_flush_callback(() => updating_active = false);
+        }
+        if (!updating_authenticated && dirty & /*authenticated*/
+        1) {
+          updating_authenticated = true;
+          login_changes.authenticated = /*authenticated*/
+          ctx2[0];
+          add_flush_callback(() => updating_authenticated = false);
+        }
+        login.$set(login_changes);
+      },
+      i(local) {
+        if (current)
+          return;
+        transition_in(login.$$.fragment, local);
+        current = true;
+      },
+      o(local) {
+        transition_out(login.$$.fragment, local);
+        current = false;
+      },
+      d(detaching) {
+        destroy_component(login, detaching);
+      }
+    };
+  }
+  function create_fragment7(ctx) {
+    let nav;
+    let span;
+    let t0;
+    let ul;
+    let li0;
+    let t2;
+    let li1;
+    let t3;
+    let if_block1_anchor;
+    let current;
+    function select_block_type(ctx2, dirty) {
+      if (!/*authenticated*/
+      ctx2[0])
+        return create_if_block_1;
+      return create_else_block;
+    }
+    let current_block_type = select_block_type(ctx, -1);
+    let if_block0 = current_block_type(ctx);
+    let if_block1 = (
+      /*showLogin*/
+      ctx[1] && create_if_block(ctx)
+    );
+    return {
+      c() {
+        nav = element("nav");
+        span = element("span");
+        span.innerHTML = `<img src="/img/uisi.png" alt="uisi" class="svelte-sd25fc"/>`;
+        t0 = space();
+        ul = element("ul");
+        li0 = element("li");
+        li0.innerHTML = `<a href="/">Home</a>`;
+        t2 = space();
+        li1 = element("li");
+        if_block0.c();
+        t3 = space();
+        if (if_block1)
+          if_block1.c();
+        if_block1_anchor = empty();
+        attr(span, "class", "svelte-sd25fc");
+        attr(ul, "class", "svelte-sd25fc");
+        attr(nav, "class", "svelte-sd25fc");
+        toggle_class(
+          nav,
+          "authenticated",
+          /*authenticated*/
+          ctx[0]
+        );
+      },
+      m(target, anchor) {
+        insert(target, nav, anchor);
+        append(nav, span);
+        append(nav, t0);
+        append(nav, ul);
+        append(ul, li0);
+        append(ul, t2);
+        append(ul, li1);
+        if_block0.m(li1, null);
+        insert(target, t3, anchor);
+        if (if_block1)
+          if_block1.m(target, anchor);
+        insert(target, if_block1_anchor, anchor);
+        current = true;
+      },
+      p(ctx2, [dirty]) {
+        if (current_block_type === (current_block_type = select_block_type(ctx2, dirty)) && if_block0) {
+          if_block0.p(ctx2, dirty);
+        } else {
+          if_block0.d(1);
+          if_block0 = current_block_type(ctx2);
+          if (if_block0) {
+            if_block0.c();
+            if_block0.m(li1, null);
+          }
+        }
+        if (!current || dirty & /*authenticated*/
+        1) {
+          toggle_class(
+            nav,
+            "authenticated",
+            /*authenticated*/
+            ctx2[0]
+          );
+        }
+        if (
+          /*showLogin*/
+          ctx2[1]
+        ) {
+          if (if_block1) {
+            if_block1.p(ctx2, dirty);
+            if (dirty & /*showLogin*/
+            2) {
+              transition_in(if_block1, 1);
+            }
+          } else {
+            if_block1 = create_if_block(ctx2);
+            if_block1.c();
+            transition_in(if_block1, 1);
+            if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+          }
+        } else if (if_block1) {
+          group_outros();
+          transition_out(if_block1, 1, 1, () => {
+            if_block1 = null;
+          });
+          check_outros();
+        }
+      },
+      i(local) {
+        if (current)
+          return;
+        transition_in(if_block1);
+        current = true;
+      },
+      o(local) {
+        transition_out(if_block1);
+        current = false;
+      },
+      d(detaching) {
+        if (detaching) {
+          detach(nav);
+          detach(t3);
+          detach(if_block1_anchor);
+        }
+        if_block0.d();
+        if (if_block1)
+          if_block1.d(detaching);
+      }
+    };
+  }
+  function instance3($$self, $$props, $$invalidate) {
+    let { authenticated } = $$props;
+    let showLogin = false;
+    function processLogout() {
+      $$invalidate(0, authenticated = !authenticated);
+      localStorage.clear();
+    }
+    const click_handler = () => $$invalidate(1, showLogin = !showLogin);
+    function login_active_binding(value) {
+      showLogin = value;
+      $$invalidate(1, showLogin);
+    }
+    function login_authenticated_binding(value) {
+      authenticated = value;
+      $$invalidate(0, authenticated);
+    }
+    $$self.$$set = ($$props2) => {
+      if ("authenticated" in $$props2)
+        $$invalidate(0, authenticated = $$props2.authenticated);
+    };
+    return [
+      authenticated,
+      showLogin,
+      processLogout,
+      click_handler,
+      login_active_binding,
+      login_authenticated_binding
+    ];
+  }
+  var Navbar = class extends SvelteComponent {
+    constructor(options) {
+      super();
+      init(this, options, instance3, create_fragment7, safe_not_equal, { authenticated: 0 });
+    }
+  };
+  var Navbar_default = Navbar;
+
+  // src/cmp/Sidebar.svelte
+  init_define_process();
+  init_internal();
+  init_disclose_version();
+  function create_fragment8(ctx) {
     let aside;
     let ul;
     let li0;
@@ -1183,7 +1618,7 @@
         t1 = space();
         li1 = element("li");
         a1 = element("a");
-        a1.textContent = "Login";
+        a1.textContent = "Login...";
         t3 = space();
         li2 = element("li");
         a2 = element("a");
@@ -1193,7 +1628,6 @@
         a3 = element("a");
         a3.textContent = "About";
         attr(a0, "href", "/");
-        attr(a0, "class", "svelte-nidq6d");
         toggle_class(
           a0,
           "active",
@@ -1201,7 +1635,6 @@
           ctx[0] === ""
         );
         attr(a1, "href", "/login?q=test");
-        attr(a1, "class", "svelte-nidq6d");
         toggle_class(
           a1,
           "active",
@@ -1209,7 +1642,6 @@
           ctx[0] === "login"
         );
         attr(a2, "href", "/register");
-        attr(a2, "class", "svelte-nidq6d");
         toggle_class(
           a2,
           "active",
@@ -1217,14 +1649,19 @@
           ctx[0] === "register"
         );
         attr(a3, "href", "/about");
-        attr(a3, "class", "svelte-nidq6d");
         toggle_class(
           a3,
           "active",
           /*active*/
           ctx[0] === "about"
         );
-        attr(aside, "class", "svelte-nidq6d");
+        attr(aside, "class", "svelte-vwjfha");
+        toggle_class(
+          aside,
+          "authenticated",
+          /*authenticated*/
+          ctx[1]
+        );
       },
       m(target, anchor) {
         insert(target, aside, anchor);
@@ -1278,6 +1715,15 @@
             ctx2[0] === "about"
           );
         }
+        if (dirty & /*authenticated*/
+        2) {
+          toggle_class(
+            aside,
+            "authenticated",
+            /*authenticated*/
+            ctx2[1]
+          );
+        }
       },
       i: noop,
       o: noop,
@@ -1288,24 +1734,27 @@
       }
     };
   }
-  function instance2($$self, $$props, $$invalidate) {
+  function instance4($$self, $$props, $$invalidate) {
     let { active } = $$props;
+    let { authenticated } = $$props;
     $$self.$$set = ($$props2) => {
       if ("active" in $$props2)
         $$invalidate(0, active = $$props2.active);
+      if ("authenticated" in $$props2)
+        $$invalidate(1, authenticated = $$props2.authenticated);
     };
-    return [active];
+    return [active, authenticated];
   }
   var Sidebar = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance2, create_fragment6, safe_not_equal, { active: 0 });
+      init(this, options, instance4, create_fragment8, safe_not_equal, { active: 0, authenticated: 1 });
     }
   };
   var Sidebar_default = Sidebar;
 
   // src/App.svelte
-  function create_if_block(ctx) {
+  function create_if_block2(ctx) {
     let switch_instance;
     let switch_instance_anchor;
     let current;
@@ -1396,42 +1845,89 @@
       }
     };
   }
-  function create_fragment7(ctx) {
+  function create_fragment9(ctx) {
+    let navbar;
+    let updating_authenticated;
+    let t0;
     let sidebar;
-    let t;
+    let t1;
     let main;
     let current;
-    sidebar = new Sidebar_default({ props: { params: (
-      /*params*/
-      ctx[1][0]
-    ) } });
+    function navbar_authenticated_binding(value) {
+      ctx[4](value);
+    }
+    let navbar_props = {};
+    if (
+      /*authenticated*/
+      ctx[3] !== void 0
+    ) {
+      navbar_props.authenticated = /*authenticated*/
+      ctx[3];
+    }
+    navbar = new Navbar_default({ props: navbar_props });
+    binding_callbacks.push(() => bind(navbar, "authenticated", navbar_authenticated_binding));
+    sidebar = new Sidebar_default({
+      props: {
+        params: (
+          /*params*/
+          ctx[1][0]
+        ),
+        authenticated: (
+          /*authenticated*/
+          ctx[3]
+        )
+      }
+    });
     let if_block = (
       /*cmp*/
-      ctx[0] && create_if_block(ctx)
+      ctx[0] && create_if_block2(ctx)
     );
     return {
       c() {
+        create_component(navbar.$$.fragment);
+        t0 = space();
         create_component(sidebar.$$.fragment);
-        t = space();
+        t1 = space();
         main = element("main");
         if (if_block)
           if_block.c();
-        attr(main, "class", "svelte-jw2lnq");
+        attr(main, "class", "svelte-1l4fjf1");
+        toggle_class(
+          main,
+          "authenticated",
+          /*authenticated*/
+          ctx[3]
+        );
       },
       m(target, anchor) {
+        mount_component(navbar, target, anchor);
+        insert(target, t0, anchor);
         mount_component(sidebar, target, anchor);
-        insert(target, t, anchor);
+        insert(target, t1, anchor);
         insert(target, main, anchor);
         if (if_block)
           if_block.m(main, null);
         current = true;
       },
       p(ctx2, [dirty]) {
+        const navbar_changes = {};
+        if (!updating_authenticated && dirty & /*authenticated*/
+        8) {
+          updating_authenticated = true;
+          navbar_changes.authenticated = /*authenticated*/
+          ctx2[3];
+          add_flush_callback(() => updating_authenticated = false);
+        }
+        navbar.$set(navbar_changes);
         const sidebar_changes = {};
         if (dirty & /*params*/
         2)
           sidebar_changes.params = /*params*/
           ctx2[1][0];
+        if (dirty & /*authenticated*/
+        8)
+          sidebar_changes.authenticated = /*authenticated*/
+          ctx2[3];
         sidebar.$set(sidebar_changes);
         if (
           /*cmp*/
@@ -1444,7 +1940,7 @@
               transition_in(if_block, 1);
             }
           } else {
-            if_block = create_if_block(ctx2);
+            if_block = create_if_block2(ctx2);
             if_block.c();
             transition_in(if_block, 1);
             if_block.m(main, null);
@@ -1456,32 +1952,46 @@
           });
           check_outros();
         }
+        if (!current || dirty & /*authenticated*/
+        8) {
+          toggle_class(
+            main,
+            "authenticated",
+            /*authenticated*/
+            ctx2[3]
+          );
+        }
       },
       i(local) {
         if (current)
           return;
+        transition_in(navbar.$$.fragment, local);
         transition_in(sidebar.$$.fragment, local);
         transition_in(if_block);
         current = true;
       },
       o(local) {
+        transition_out(navbar.$$.fragment, local);
         transition_out(sidebar.$$.fragment, local);
         transition_out(if_block);
         current = false;
       },
       d(detaching) {
         if (detaching) {
-          detach(t);
+          detach(t0);
+          detach(t1);
           detach(main);
         }
+        destroy_component(navbar, detaching);
         destroy_component(sidebar, detaching);
         if (if_block)
           if_block.d();
       }
     };
   }
-  function instance3($$self, $$props, $$invalidate) {
+  function instance5($$self, $$props, $$invalidate) {
     let cmp, params = {}, query = {};
+    let authenticated = localStorage.getItem("authenticated");
     const router = router_default(routes_default, E404_default, (route) => {
       $$invalidate(0, cmp = route.cmp);
       $$invalidate(1, params = route.params);
@@ -1491,12 +2001,16 @@
     onMount(() => {
       router.route();
     });
-    return [cmp, params, query];
+    function navbar_authenticated_binding(value) {
+      authenticated = value;
+      $$invalidate(3, authenticated);
+    }
+    return [cmp, params, query, authenticated, navbar_authenticated_binding];
   }
   var App = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance3, create_fragment7, safe_not_equal, {});
+      init(this, options, instance5, create_fragment9, safe_not_equal, {});
     }
   };
   var App_default = App;

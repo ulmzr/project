@@ -1,14 +1,17 @@
 <script>
     import { onMount } from "svelte";
-    import Router from "svelte-devserver/router";
+    import Router from "../router";
     import routes from "./routes";
 
     import E404 from "./cmp/E404.svelte";
+    import Navbar from "./cmp/Navbar.svelte";
     import Sidebar from "./cmp/Sidebar.svelte";
 
     let cmp,
         params = {},
         query = {};
+
+    let authenticated = localStorage.getItem("authenticated");
 
     const router = Router(routes, E404, (route) => {
         cmp = route.cmp;
@@ -22,18 +25,11 @@
     });
 </script>
 
-<!-- <nav>
-    <ul>
-        <li><a href="/" class:active={params[0] === ""}>Home</a></li>
-        <li><a href="/login?q=test" class:active={params[0] === "login"}>Login</a></li>
-        <li><a href="/register" class:active={params[0] === "register"}>Register</a></li>
-        <li><a href="/about" class:active={params[0] === "about"}>About</a></li>
-    </ul>
-</nav> -->
+<Navbar bind:authenticated />
 
-<Sidebar params={params[0]} />
+<Sidebar params={params[0]} {authenticated} />
 
-<main>
+<main class:authenticated>
     {#if cmp}
         <svelte:component this={cmp} {params} {query} />
     {/if}
@@ -41,6 +37,19 @@
 
 <style>
     main {
+        display: block;
+        position: relative;
         padding: 1.5em 2em;
+        margin-left: 0;
+    }
+
+    :global(nav) ~ main {
+        padding-top: calc(var(--navbar-height) + 2em);
+    }
+
+    @media (min-width: 768px) {
+        main.authenticated {
+            margin-left: var(--sidebar-width);
+        }
     }
 </style>

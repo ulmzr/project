@@ -1,32 +1,85 @@
-/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/fe/src/cmp/Sidebar.esbuild-svelte-fake-css */
-aside.svelte-nidq6d {
-  --width:16em;
-  --pos:calc(var(--width) * -1);
-  --sidebar-bg:#123;
+/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/frontend/src/cmp/Login.esbuild-svelte-fake-css */
+section.svelte-jotjxi {
+  z-index: 99;
+  position: fixed;
+  inset: 0;
+  background-color: #fff;
+}
+
+/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/frontend/src/cmp/Navbar.esbuild-svelte-fake-css */
+nav.svelte-sd25fc.svelte-sd25fc {
+  z-index: 9;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  top: 0;
+  height: var(--navbar-height);
+  background-color: var(--navbar-bg);
+  color: #fff;
+  left: 0;
+  right: 0;
+  padding: 0 1em;
+}
+nav.svelte-sd25fc > span.svelte-sd25fc {
+  height: 100%;
+  padding: 0.5em;
+}
+img.svelte-sd25fc.svelte-sd25fc {
+  height: inherit;
+}
+ul.svelte-sd25fc.svelte-sd25fc {
+  display: flex;
+  gap: 1em;
+}
+@media (min-width: 768px) {
+  nav.authenticated.svelte-sd25fc.svelte-sd25fc {
+    left: var(--sidebar-width);
+  }
+}
+
+/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/frontend/src/cmp/Sidebar.esbuild-svelte-fake-css */
+aside.svelte-vwjfha {
+  z-index: 9;
   position: fixed;
   top: 0;
   bottom: 0;
-  left: var(--pos);
+  left: var(--sidebar-left);
   background-color: var(--sidebar-bg);
-  width: var(--width);
+  width: var(--sidebar-width);
   color: #fff;
 }
-a.svelte-nidq6d {
-  text-decoration: none;
-  color: inherit;
-}
 @media (min-width: 768px) {
-  aside.svelte-nidq6d {
+  aside.authenticated.svelte-vwjfha {
     left: 0;
   }
 }
 
-/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/fe/src/App.esbuild-svelte-fake-css */
-main.svelte-jw2lnq {
+/* fakecss:C:/Users/yulmizar/Documents/nodejs/project/frontend/src/App.esbuild-svelte-fake-css */
+main.svelte-1l4fjf1 {
+  display: block;
+  position: relative;
   padding: 1.5em 2em;
+  margin-left: 0;
+}
+nav ~ main.svelte-1l4fjf1 {
+  padding-top: calc(var(--navbar-height) + 2em);
+}
+@media (min-width: 768px) {
+  main.authenticated.svelte-1l4fjf1 {
+    margin-left: var(--sidebar-width);
+  }
 }
 
 /* src/main.scss */
+:root {
+  --fonts: system-ui, sans-serif;
+  --sidebar-width: 16em;
+  --sidebar-left: calc(var(--sidebar-width) * -1);
+  --sidebar-bg: #123;
+  --navbar-height: 4em;
+  --navbar-bg: #456;
+}
 *,
 *::before,
 *::after {
@@ -41,8 +94,9 @@ html:focus-within {
   scroll-behavior: smooth;
 }
 body {
-  font-family: system-ui, sans-serif;
+  font-family: var(--fonts);
   line-height: 1.5;
+  min-height: 100svh;
   text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;
 }
@@ -72,6 +126,9 @@ h5 {
 h6 {
   font-size: 0.67em;
 }
+:is(h1, h2, h3, h4, h5, h6, p) + p {
+  margin-top: 1rem;
+}
 picture,
 video,
 canvas,
@@ -88,7 +145,57 @@ img {
   background-size: cover;
   shape-margin: 0.75rem;
 }
-:root {
-  --body-bg: #123;
-  --nav-bg: rgb(69, 92, 115);
+li a {
+  text-decoration: none;
+  color: inherit;
+}
+nav li {
+  list-style: none;
+}
+button {
+  font-family: var(--fonts);
+  font-size: 1em;
+  outline: 0;
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+}
+.button {
+  --color: #333;
+  --background: #e6e9ed;
+  --border: #dadce0;
+  --shadow: #dadce055;
+  --focus: #dadce099;
+  --active: inset 0.0625em 0.0625em 0.3125em rgba(67, 74, 84, 0.875);
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--color);
+  min-height: 2.5em;
+  min-width: 7em;
+  border-radius: 0.5em;
+  padding: 0 1.25em;
+  padding: 0 1em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.button:not([disabled], .disabled):hover {
+  z-index: 1;
+  box-shadow: 0 0 0 0.225em var(--shadow);
+}
+.button:not([disabled], .disabled):focus {
+  z-index: 1;
+  box-shadow: 0 0 0 0.225em var(--focus);
+}
+.button:not([disabled], .disabled):active {
+  z-index: 1;
+  box-shadow: var(--active);
+}
+.button:is(.disabled, [disabled]) {
+  cursor: not-allowed;
+}
+.button.block {
+  width: 100%;
 }

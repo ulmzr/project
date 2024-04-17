@@ -1,3 +1,15 @@
+:root {
+    --fonts: system-ui, sans-serif;
+    // sidebar
+    --sidebar-width: 16em;
+    --sidebar-left: calc(var(--sidebar-width) * -1);
+    --sidebar-bg: #123;
+
+    // navbar
+    --navbar-height: 4em;
+    --navbar-bg: #456;
+}
+
 *,
 *::before,
 *::after {
@@ -15,8 +27,9 @@ html:focus-within {
 }
 
 body {
-    font-family: system-ui, sans-serif;
+    font-family: var(--fonts);
     line-height: 1.5;
+    min-height: 100svh;
     text-rendering: optimizeSpeed;
     -webkit-font-smoothing: antialiased;
 }
@@ -54,6 +67,10 @@ h6 {
     font-size: 0.67em;
 }
 
+:is(h1, h2, h3, h4, h5, h6, p) + p {
+    margin-top: 1rem;
+}
+
 picture,
 video,
 canvas,
@@ -72,7 +89,67 @@ img {
     shape-margin: 0.75rem;
 }
 
-:root {
-    --body-bg: #123;
-    --nav-bg: rgb(69, 92, 115);
+li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+nav li {
+    list-style: none;
+}
+
+button {
+    font-family: var(--fonts);
+    font-size: 1em;
+    outline: 0;
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+// button
+
+.button {
+    --color: #333;
+    --background: #e6e9ed;
+    --border: #dadce0;
+    --shadow: #dadce055;
+    --focus: #dadce099;
+    --active: inset 0.0625em 0.0625em 0.3125em rgba(67, 74, 84, 0.875);
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--color);
+    min-height: 2.5em;
+    min-width: 7em;
+    border-radius: 0.5em;
+    padding: 0 1.25em;
+    padding: 0 1em;
+    margin-bottom: 0.5em;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+
+    &:not([disabled], .disabled):hover {
+        z-index: 1;
+        box-shadow: 0 0 0 0.225em var(--shadow);
+    }
+
+    &:not([disabled], .disabled):focus {
+        z-index: 1;
+        box-shadow: 0 0 0 0.225em var(--focus);
+    }
+
+    &:not([disabled], .disabled):active {
+        z-index: 1;
+        box-shadow: var(--active);
+    }
+
+    &:is(.disabled, [disabled]) {
+        cursor: not-allowed;
+    }
+
+    &.block {
+        width: 100%;
+    }
 }

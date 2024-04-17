@@ -1,8 +1,9 @@
 <script>
     export let active;
+    export let authenticated;
 </script>
 
-<aside>
+<aside class:authenticated>
     <ul>
         <li><a href="/" class:active={active === ""}>Home</a></li>
         <li><a href="/login?q=test" class:active={active === "login"}>Login...</a></li>
@@ -13,26 +14,18 @@
 
 <style>
     aside {
-        --width: 16em;
-        --pos: calc(var(--width) * -1);
-        --sidebar-bg: #123;
-
+        z-index: 9;
         position: fixed;
         top: 0;
         bottom: 0;
-        left: var(--pos);
+        left: var(--sidebar-left);
         background-color: var(--sidebar-bg);
-        width: var(--width);
+        width: var(--sidebar-width);
         color: #fff;
     }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-
     @media (min-width: 768px) {
-        aside {
+        aside.authenticated {
             left: 0;
         }
     }
