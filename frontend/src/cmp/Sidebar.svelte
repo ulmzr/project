@@ -5,7 +5,7 @@
 <aside>
     <ul>
         <li><a href="/" class:active={active === ""}>Home</a></li>
-        <li><a href="/login?q=test" class:active={active === "login"}>Login</a></li>
+        <li><a href="/login?q=test" class:active={active === "login"}>Login...</a></li>
         <li><a href="/register" class:active={active === "register"}>Register</a></li>
         <li><a href="/about" class:active={active === "about"}>About</a></li>
     </ul>
