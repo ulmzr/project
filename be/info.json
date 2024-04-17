@@ -1,0 +1,12 @@
+{
+   "level": 50,
+   "time": 1694358893299,
+   "pid": 9292,
+   "hostname": "DESKTOP-DB40R05",
+   "err": {
+      "type": "SyntaxError",
+      "message": "Unexpected identifier at C:\\Users\\fariz\\Desktop\\Skripsi2nd\\apps\\api\\routes\\research\\index.js:77",
+      "stack": "C:\\Users\\fariz\\Desktop\\Skripsi2nd\\apps\\api\\routes\\research\\index.js:77\n            dbData,\n            ^^^^^^\n\nSyntaxError: Unexpected identifier\n    at Object.compileFunction (node:vm:352:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1033:15)\n    at Module._compile (node:internal/modules/cjs/loader:1069:27)\n    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1159:10)\n    at Module.load (node:internal/modules/cjs/loader:981:32)\n    at Function.Module._load (node:internal/modules/cjs/loader:822:12)\n    at Module.require (node:internal/modules/cjs/loader:1005:19)\n    at require (node:internal/modules/cjs/helpers:102:18)\n    at loadPlugin (C:\\Users\\fariz\\Desktop\\Skripsi2nd\\node_modules\\@fastify\\autoload\\index.js:259:15)\n    at C:\\Users\\fariz\\Desktop\\Skripsi2nd\\node_modules\\@fastify\\autoload\\index.js:43:12"
+   },
+   "msg": "Unexpected identifier at C:\\Users\\fariz\\Desktop\\Skripsi2nd\\apps\\api\\routes\\research\\index.js:77"
+}
